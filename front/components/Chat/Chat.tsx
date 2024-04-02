@@ -15,7 +15,7 @@ interface Message {
     text: string;
     sender: string;
     senderId: string;
-    roomId:string | undefined;
+    roomId: string | undefined;
     tx: TxInfo | null;
 }
 
@@ -23,6 +23,7 @@ export const Chat = () => {
     const { roomId, name } = useParams();
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
+    const [isSending, setIsSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -38,17 +39,17 @@ export const Chat = () => {
 
         socket.on('user-connected', ({ name, message, roomId: userRoomId }) => {
 
-                console.log(message);
-                const newUserMessage: Message = {
-                    text: `User ${message} connected`,
-                    sender: 'System',
-                    senderId: name,
-                    roomId: userRoomId,
-                    tx: null
-                };
-                if (!messages.find(m => m.text === newUserMessage.text)) {
-                    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
-                }
+            console.log(message);
+            const newUserMessage: Message = {
+                text: `User ${message} connected`,
+                sender: 'System',
+                senderId: name,
+                roomId: userRoomId,
+                tx: null
+            };
+            if (!messages.find(m => m.text === newUserMessage.text)) {
+                setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+            }
 
         });
 
@@ -57,7 +58,6 @@ export const Chat = () => {
             socket.removeListener('user-connected');
         };
     }, [roomId]);
-
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -69,16 +69,20 @@ export const Chat = () => {
     };
 
     const sendMessage = () => {
-        if (inputMessage.trim() !== '') {
+        if (!isSending && inputMessage.trim() !== '') {
+            setIsSending(true);
             const newMessage: Message = {
                 text: inputMessage,
                 sender: name ? name : 'sender',
                 senderId: socket.id || '1',
-                roomId:roomId,
+                roomId: roomId,
                 tx: null
             };
             socket.emit('send-message', { message: newMessage, roomId });
             setInputMessage('');
+            setTimeout(() => {
+                setIsSending(false);
+            }, 500); // Пауза в полсекунды
         }
     };
 
@@ -93,18 +97,21 @@ export const Chat = () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({txid, message: inputMessage})
+                    body: JSON.stringify({ txid, message: inputMessage })
                 });
                 const data = await response.json();
                 const newMessage: Message = {
                     text: inputMessage,
                     sender: name ? name : 'sender',
                     senderId: socket.id || '1',
-                    roomId:roomId,
+                    roomId: roomId,
                     tx: data.txInfo
                 };
                 setInputMessage('');
                 socket.emit('send-message', { message: newMessage, roomId });
+                setTimeout(() => {
+                    setIsSending(false);
+                }, 500); // Пауза в полсекунды
             } catch (error) {
                 console.error('Error processing txid:', error);
             }
@@ -115,7 +122,7 @@ export const Chat = () => {
 
     return (
         <div className="chat-container">
-            <div style={{color: "white", fontSize: "30px", letterSpacing: '3px'}}>Chat {roomId}</div>
+            <div style={{ color: "white", fontSize: "30px", letterSpacing: '3px' }}>Chat {roomId}</div>
             <div className="messages-container" ref={messagesEndRef}>
                 {messages.map((message, index) => (
                     <div
@@ -152,8 +159,15 @@ export const Chat = () => {
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Type your message..."
                     className="message-input"
+                    disabled={isSending} // Делаем поле ввода неактивным во время отправки
                 />
-                <button onClick={sendMessageWithTxid} className="send-button">Send</button>
+                <button
+                    onClick={sendMessageWithTxid}
+                    className="send-button"
+                    disabled={isSending} // Делаем кнопку неактивной во время отправки
+                >
+                    {isSending ? 'Sending...' : 'Send'}
+                </button>
             </div>
         </div>
     );

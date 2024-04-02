@@ -6,8 +6,11 @@
     ```bash
     cd back/
     ```
-
-2. Run the following command to start the backend server:
+2. Install deps
+    ```bash
+   npm i 
+    ```
+3. Run the following command to start the backend server:
     ```bash
     npx ts-node server.ts
     ```
@@ -18,8 +21,12 @@
     ```bash
     cd front/
     ```
+2. Install deps 
+    ```bash
+   npm i 
+    ```
 
-2. Run the following command to start the frontend application in development mode:
+3. Run the following command to start the frontend application in development mode:
     ```bash
     npm run dev
     ```
