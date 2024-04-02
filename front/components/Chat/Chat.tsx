@@ -159,12 +159,12 @@ export const Chat = () => {
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Type your message..."
                     className="message-input"
-                    disabled={isSending} // Делаем поле ввода неактивным во время отправки
+                    disabled={isSending}
                 />
                 <button
                     onClick={sendMessageWithTxid}
                     className="send-button"
-                    disabled={isSending} // Делаем кнопку неактивной во время отправки
+                    disabled={isSending}
                 >
                     {isSending ? 'Sending...' : 'Send'}
                 </button>

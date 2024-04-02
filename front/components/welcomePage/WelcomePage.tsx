@@ -3,28 +3,15 @@ import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import io from 'socket.io-client';
 export const WelcomePage = () => {
-    const [createChat, setCreateChat] = useState('create');
     const [name, setName] = useState('');
     const [chatId, setChatId] = useState('');
     const [nameValid, setNameValid] = useState(true);
     const [chatIdValid, setChatIdValid] = useState(true);
     const [redirectToChat, setRedirectToChat] = useState(false);
     const navigate = useNavigate();
-    const socket = io(); // Подключение к серверу без указания URL
+    const socket = io();
 
     const handleClickCreate = () => {
-        const isNameValid = name.trim() !== '';
-        setNameValid(isNameValid);
-
-        const isChatIdValid = /^\d+$/.test(chatId.trim());
-        setChatIdValid(isChatIdValid);
-
-        if (isNameValid && isChatIdValid) {
-            setRedirectToChat(true);
-        }
-    };
-
-    const handleClickJoin = () => {
         const isNameValid = name.trim() !== '';
         setNameValid(isNameValid);
 
