@@ -1,0 +1,34 @@
+.welcomePage {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 90vh;
+  background-color: #242424;
+  &_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+.form-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.welcomePage_text {
+  margin-bottom: 30px;
+  color: white;
+  font-family: Ubuntu;
+  font-size: 40px;
+}
+
+.form-floating {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
