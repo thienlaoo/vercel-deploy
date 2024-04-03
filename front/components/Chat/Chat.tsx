@@ -92,7 +92,7 @@ export const Chat = () => {
         if (matches) {
             const txid = matches[0];
             try {
-                const response = await fetch('http://localhost:3000/process-txid', {
+                const response = await fetch('https://simple-server-dev-ztde.2.ie-1.fl0.io/process-txid', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
