@@ -1,7 +1,6 @@
 import './WelcomePage.scss';
 import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
-import io from 'socket.io-client';
 export const WelcomePage = () => {
     const [name, setName] = useState('');
     const [chatId, setChatId] = useState('');
@@ -9,7 +8,6 @@ export const WelcomePage = () => {
     const [chatIdValid, setChatIdValid] = useState(true);
     const [redirectToChat, setRedirectToChat] = useState(false);
     const navigate = useNavigate();
-    const socket = io();
 
     const handleClickCreate = () => {
         const isNameValid = name.trim() !== '';
