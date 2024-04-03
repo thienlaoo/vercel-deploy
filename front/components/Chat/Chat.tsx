@@ -139,6 +139,7 @@ export const Chat = () => {
                         </div>
                         {message.tx && (
                             <div className="tx-info">
+                                <p className="tx">Id: {message.tx.Txid}</p>
                                 <p className="tx">Amount: {message.tx.Amount}</p>
                                 <p className="tx">From: {message.tx.WalletFrom}</p>
                                 <p className="tx">To: {message.tx.WalletTo}</p>
